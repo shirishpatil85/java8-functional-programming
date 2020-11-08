@@ -5,6 +5,9 @@ import java.util.function.BiFunction;
 import java.util.function.DoubleFunction;
 import java.util.function.LongFunction;
 import java.util.function.IntFunction;
+import java.util.function.UnaryOperator;
+import java.util.function.IntUnaryOperator;
+
 import java.lang.Integer;
 
 public class FunctionExamples {
@@ -34,6 +37,17 @@ public class FunctionExamples {
         System.out.println(intFunction.apply(1000000));
         System.out.println(longFunction.apply(1000000));
         System.out.println(doubleFunction.apply(1000000));
+
+        System.out.println("** OPERATOR INTERFACES ARE SUBINTERFACES OF FUNCTIONS");
+
+        UnaryOperator<String> i  = (x)-> x.toUpperCase();
+        System.out.println(i.apply("java2s.com"));
+
+        System.out.println("** SPECIAL FUNCTIONAL INTERFACES WITH SAME IN AND OUT TYPE - <INT/LONG/DOUBLE><UNARY/BINARY>OPERATOR>(2inputs)");
+        IntUnaryOperator squareOperator = (int x) -> x*x;
+        System.out.println("** IntUnaryOperator int x -> x*x" + squareOperator.applyAsInt(2));
+
+        System.out.println("** OTHER SPECIAL FUNCTIONAL INTERFACES <TO><DOUBLE/INT/LONG><FUNCTION/BIFUNCTION>");
 
     }
 
