@@ -1,4 +1,4 @@
-package com.codersyndrome.lambda;
+package com.codersyndrome.functionalinterfaces;
 
 import java.util.function.Consumer;
 import java.util.function.BiConsumer;

@@ -1,4 +1,4 @@
-package com.codersyndrome.lambda;
+package com.codersyndrome.functionalinterfaces;
 
 public class FunctionalInterfaceExamples {
     public static void main(String args[]) 
