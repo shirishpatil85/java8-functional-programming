@@ -46,5 +46,13 @@ public class StreamCreationExamples {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // STREAM CONCAT
+
+        // STREAM BUILDER
+
+        // OPTIONAL
+
+        // STREAM TO ARRAY
     }
 }
