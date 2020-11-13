@@ -1,7 +1,6 @@
 package com.codersyndrome.stream;
 
 import java.util.stream.*;
-import java.util.Arrays;
 
 public class IntermediateOperatorExamples {
 
