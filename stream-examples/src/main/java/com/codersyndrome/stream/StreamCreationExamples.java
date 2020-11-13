@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class StreamCreationExamples {
-    
+
     public static void main(String[] args) {
 
         // ARRAYS.STREAM.FOREACH
@@ -32,7 +32,7 @@ public class StreamCreationExamples {
         map.put(1, "A");
         map.put(2, "B");
         System.out.println("\n** MAP.ENTRYSET.STREAM.FOREACH");
-        Stream<Map.Entry<Integer, String> > mapStream =  map.entrySet().stream();
+        Stream<Map.Entry<Integer, String>> mapStream = map.entrySet().stream();
         mapStream.forEach(System.out::println);
 
         // FILES.LINES
@@ -42,6 +42,7 @@ public class StreamCreationExamples {
             Stream<String> lines = Files.lines(pathTempFile);
             System.out.println("\n**FILES.LINES.FOREACH");
             lines.forEach(System.out::println);
+            lines.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
