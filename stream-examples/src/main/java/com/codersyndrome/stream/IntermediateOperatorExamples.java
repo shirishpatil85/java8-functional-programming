@@ -8,7 +8,7 @@ public class IntermediateOperatorExamples {
 
         // INTERMEDIATE RETURN STREAM VALUES
         System.out.println(
-                "** INTERMEDIATE OPERATOR RETURN STREAM VALUES, NEEDS TERMINAL OP TO WORK. STREAM OUTPUT CANNOT BE USED ELSE ILLEGALACCESS EXCEPTION");
+                "** INTERMEDIATE OPERATOR RETURN STREAM VALUES, NEEDS TERMINAL OP TO WORK. STREAM OUTPUT CANNOT BE USED ELSE ILLEGALACCESS EXCEPTION ");
         Stream<String> stream = Stream.of("a", "b", "c", "d", "e", "f", "f1", "f12");
 
         stream.peek(s -> System.out.println(" Printing stream : " + s)).filter(i -> i.length() >= 1)
