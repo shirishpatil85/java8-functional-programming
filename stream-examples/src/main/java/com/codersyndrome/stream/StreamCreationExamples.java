@@ -1,4 +1,4 @@
-package com.codersyndrome;
+package com.codersyndrome.stream;
 
 import java.util.*;
 import java.util.stream.*;
