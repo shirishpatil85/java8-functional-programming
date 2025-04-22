@@ -1,7 +1,7 @@
 # java8-functional-programming
 Java8 Functional Programming Samples
 
-## Lambda Expression
+## 1. Lambda Expression
 - Lambda expressions are used to define functions (or anonymous class) without creating an object explicitly.
 - More light weight as object is not created. E.g
 ```
@@ -15,7 +15,7 @@ Comparator<Integer> comparator = new Comparator<Integer>() {
 Comparator<Integer> comparator = (a, b) -> a - b;
 ```
   
-## Functional Interface
+## 2.Functional Interface
 - Its an interface with exactly one abstract method. 
 - It can have static and default methods. 
 - Its used to point to lambda expresssion or method references. 
@@ -55,7 +55,7 @@ Function<Integer, Integer> combined = multiplyBy2.andThen(add10);
 
 ```
 
-## Method reference
+## 3. Method reference
 - Method references are short way of denoting static or instance methods or constructor(class::new) of a class.
 - These methods can be assigned to Functional interfaces just like lambda. 
 - Main advantage is that it automatically maps the input and output parameters of FI with that of method signature.
@@ -67,28 +67,81 @@ MyClass obj = supplier.get();
 List<String> names = people.stream().map(Person::getName) // calls p.getName() for each Person
                            .collect(Collectors.toList());
 ```
-## Stream APIs
 
-### Stream creation
+## 4. Stream APIs
 
-- Stream has its own factory method of, builder, concat method. 
-- Also Arrays and Collections classes can use stream method to create a stream. 
-- Files in nio package has lines method to return stream. 
+- Stream creation can be done for Array, Collection and NIO Files using stream method
+- Intermediate Operators cannot be used without a terminal operator and return a stream. 
+- Terminal Operators are the end of stream operation chain and returns non stream object. 
 - paralleSteam() method is used to create  a parallel processing stream or use parallel() to make intermediatory stream parallel capable of parallel processing.
-- collect(Collectors.toList()/toSet()/toMap(..) are used for mapping them back to collections and arrays.
-  
-### Intermediate Operators
-- These operators cannot be used without a terminal operator and return a stream. 
-- Also cannot be resued once terminal operator is used over it 
-- E.g. Filter, map- takes function as input , peek, distinct, skip, limit. 
-  
-### Terminal Operators
-- These are the end of stream operation chain and returns non stream object. 
-- Stream become unusable after use of terminal operator over it. 
-- E.g. forEach
-- E.g. Aggregation - sum, count, max, min, reduce(similar to map but it produces single result,takes bifunction as input).
-- E.g. Shortciruciting - findFirst() - order maintained in parallel stream, findAny()
 
+## Operator examples
+```
+/* Intermediate Operators */
+
+// 1. map and filter
+
+List<String> upper = names.stream()
+                          .filter(n -> n.length() > 3)
+                          .map(String::toUpperCase)
+                          .collect(Collectors.toList());
+
+// 2. distinct / sort / skip(n) / limit(n)
+
+List<Integer> numbers = Arrays.asList(5, 1, 2, 2, 3, 4, 4, 6);
+List<Integer> result = numbers.stream()
+                              .distinct()
+                              .sorted()
+                              .skip(2)
+                              .limit(3)
+                              .collect(Collectors.toList());
+
+System.out.println(result);  // Output: [3, 4, 5]
+
+// 3. peek for debug
+
+/* Terminal Operators */
+
+
+// 1.  Aggregation - sum, count, max, min, reduce(similar to map but it produces single result,takes bifunction as input).
+
+    Optional<Integer> min = nums.stream().min(Integer::compareTo);
+    
+    int total = nums.stream().mapToInt(Integer::intValue).sum();
+    int totalAge = people.stream().mapToInt(p -> p.age).sum();  // sum of ages of all people
+    int sumUsingReduce = nums.stream().reduce(0, (a, b) -> a + b);
+
+// 2. foreach
+
+// 3. collect(Collectors.toList()/toSet()/toMap/groupingBy(..) are used for mapping them back to collections and arrays.
+
+    long count = names.stream().collect(Collectors.counting());
+    String result = names.stream().collect(Collectors.joining(", "));
+    IntSummaryStatistics stats = ages.stream().collect(Collectors.summarizingInt(age -> age));
+    
+    List<String> collected = names.stream().collect(Collectors.toList());
+    Set<Integer> unique = nums.stream().collect(Collectors.toSet());
+    Map<Integer, String> idToName = people.stream()
+        .collect(Collectors.toMap(
+            person -> person.id,
+            person -> person.name
+        ));
+
+    Map<String, List<Person>> byCity = people.stream().collect(Collectors.groupingBy(p -> p.city));   // key based groups
+    
+    Map<String, List<String>> namesByCity = people.stream().collect(Collectors.
+                                .groupingBy(p -> p.city, Collectors.mapping(p ->p.name,Collectors.toList())));  // key and transformed value
+
+// 4. Shortciruciting - findFirst() - order maintained in parallel stream, findAny() and anyMatch/allMatch/noneMatch
+    List<String> names = List.of("Alice", "Bob", "Charlie");
+    Optional<String> any = names.stream().findAny();
+    any.ifPresent(System.out::println);  // Output could be Alice, Bob, or Charlie (esp. i
+
+    boolean anyOdd = numbers.stream().anyMatch(n -> n % 2 != 0);
+    boolean allEven = numbers.stream().allMatch(n -> n % 2 == 0);
+    boolean noneNegative = numbers.stream().noneMatch(n -> n < 0);
+
+```
 ## FAQ coding questions
 ```
 int sumOfSquaresOfOdd = numbers.stream()
