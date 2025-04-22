@@ -19,31 +19,54 @@ Comparator<Integer> comparator = (a, b) -> a - b;
 - Its an interface with exactly one abstract method. 
 - It can have static and default methods. 
 - Its used to point to lambda expresssion or method references. 
-- E.g. Consumer, Function, BiFunction, UnaryOperator, BinaryOperator, Predicate, Supplier. 
-- It has default andThen(function0 callback method for chaining. 
-- There are TypeFunction which   take specific type input and return parameterized type output. ToTypeFunction takes parameterized inout and returns
-  fixed Type value.
-  
-### Consumer FI
-- It has method accept does not return any output.
-  
-### Function FI
-- It has method apply which takes one input and returns any output and can take one or two inputs(BiFunction). 
-- Operator are sub interfaces of function FI and return same type as the input. 
-- BiFunction takes two input and returns any output.
 
-### Predicate FI
-- It has method test which takes one input returns boolean output. 
-- Has additional callback methods - and , or and negate.
+### Types
+- Consumer, Function, BiFunction, UnaryOperator, BinaryOperator, Predicate, Supplier. 
+```
 
-### Supplier FI
-- It has method get which takes no input and returns any output.
-  
+// Consumer<T> FI : void apply(T o)
+Consumer<String> printer = s -> System.out.println("Hello " + s);
+
+// Supplier FI : T get();
+Supplier<String> greetingSupplier = () -> "Hello, world!";
+
+// Function<T,R> FI : R apply<T>()
+Function<String, Integer> lengthCalc = str -> str.length();
+
+// UnaryOperator<T> FI : special case of function where T and R are same
+UnaryOperator<String> toUpper = str -> str.toUpperCase();
+
+// BiFunction<T,U,R>  FI :R apply<T,U>
+BiFunction<Integer, Integer, Integer> sum = (a, b) -> a + b;
+
+// BinaryOperator<T,T> FI : special case of function where 2 input and outut types match 
+BinaryOperator<Integer> multiply = (a, b) -> a * b;
+
+// Predicate<T> FI : boolean test<t>
+Predicate<String> isEmpty = str -> str.isEmpty();
+System.out.println(isEmpty.test(""));     // true
+```
+### Function chaining
+- It has default andThen(function0 callback method for chaining.
+```
+Function<Integer, Integer> multiplyBy2 = x -> x * 2;
+Function<Integer, Integer> add10 = x -> x + 10;
+Function<Integer, Integer> combined = multiplyBy2.andThen(add10);
+
+```
+
 ## Method reference
 - Method references are short way of denoting static or instance methods or constructor(class::new) of a class.
 - These methods can be assigned to Functional interfaces just like lambda. 
 - Main advantage is that it automatically maps the input and output parameters of FI with that of method signature.
+```
+// Static or Non static methods or constructors
+Supplier<MyClass> supplier = MyClass::new;
+MyClass obj = supplier.get();
 
+List<String> names = people.stream().map(Person::getName) // calls p.getName() for each Person
+                           .collect(Collectors.toList());
+```
 ## Stream APIs
 
 ### Stream creation
