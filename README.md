@@ -21,7 +21,9 @@ Comparator<Integer> comparator = (a, b) -> a - b;
 - Its used to point to lambda expresssion or method references. 
 
 ### Types
-- Consumer, Function, BiFunction, UnaryOperator, BinaryOperator, Predicate, Supplier. 
+- Based on the number of input and output parameters
+- Consumer, Supplier, Function, UnaryOperator, BiFunction, BinaryOperator, Predicate.
+
 ```
 
 // Consumer<T> FI : void apply(T o)
@@ -71,18 +73,14 @@ List<String> names = people.stream().map(Person::getName) // calls p.getName() f
 ## 4. Stream APIs
 
 - Stream creation can be done for Array, Collection and NIO Files using stream method
+- paralleSteam() method is used to create  a parallel processing stream or use parallel() to make intermediatory stream parallel
 - Intermediate Operators cannot be used without a terminal operator and return a stream. 
-- Terminal Operators are the end of stream operation chain and returns non stream object. 
-- paralleSteam() method is used to create  a parallel processing stream or use parallel() to make intermediatory stream parallel capable of parallel processing.
-
-## Operator examples
 ```
-/* Intermediate Operators */
-
-// 1. map and filter
+// 1. peek(Consumer), map(Function) , filter(Predicate)
 
 List<String> upper = names.stream()
                           .filter(n -> n.length() > 3)
+                          .peek( n -> System.out.println(n))
                           .map(String::toUpperCase)
                           .collect(Collectors.toList());
 
@@ -98,48 +96,97 @@ List<Integer> result = numbers.stream()
 
 System.out.println(result);  // Output: [3, 4, 5]
 
-// 3. peek for debug
+````
+- Terminal Operators are the end of stream operation chain and returns non stream object. 
 
-/* Terminal Operators */
 
+
+
+```
 
 // 1.  Aggregation - sum, count, max, min, reduce(similar to map but it produces single result,takes bifunction as input).
 
-    Optional<Integer> min = nums.stream().min(Integer::compareTo);
+    Optional<Integer> min = nums
+                            .stream()
+                            .min(Integer::compareTo);
     
-    int total = nums.stream().mapToInt(Integer::intValue).sum();
-    int totalAge = people.stream().mapToInt(p -> p.age).sum();  // sum of ages of all people
-    int sumUsingReduce = nums.stream().reduce(0, (a, b) -> a + b);
+    int total = nums
+                  .stream()
+                  .mapToInt(Integer::intValue)
+                  .sum();
 
-// 2. foreach
+    int totalAge = people
+                .stream()
+                .mapToInt(p -> p.age)
+                .sum();  // sum of ages of all people
 
+    int sumUsingReduce = nums
+            .stream()
+            .reduce(0, (a, b) -> a + b);
+
+// 2. foreach 
+
+    int total = nums
+                .stream()
+                .forEach(n -> System.out.println(n));
+                  .
 // 3. collect(Collectors.toList()/toSet()/toMap/groupingBy(..) are used for mapping them back to collections and arrays.
 
-    long count = names.stream().collect(Collectors.counting());
-    String result = names.stream().collect(Collectors.joining(", "));
-    IntSummaryStatistics stats = ages.stream().collect(Collectors.summarizingInt(age -> age));
-    
-    List<String> collected = names.stream().collect(Collectors.toList());
-    Set<Integer> unique = nums.stream().collect(Collectors.toSet());
-    Map<Integer, String> idToName = people.stream()
-        .collect(Collectors.toMap(
-            person -> person.id,
-            person -> person.name
-        ));
+    long count = names
+            .stream()
+            .collect(Collectors.counting());
 
-    Map<String, List<Person>> byCity = people.stream().collect(Collectors.groupingBy(p -> p.city));   // key based groups
+    String result = names
+            .stream()
+            .collect(Collectors.joining(", "));
+
+    IntSummaryStatistics stats = ages
+            .stream()
+            .collect(Collectors.summarizingInt(age -> age));
     
-    Map<String, List<String>> namesByCity = people.stream().collect(Collectors.
-                                .groupingBy(p -> p.city, Collectors.mapping(p ->p.name,Collectors.toList())));  // key and transformed value
+    List<String> collected = names
+            .stream()
+            .collect(Collectors.toList());
+
+    Set<Integer> unique = nums
+            .stream()
+            .collect(Collectors.toSet());
+
+    Map<Integer, String> idToName = people
+                .stream()
+                .collect(Collectors.toMap(
+                    person -> person.id,
+                    person -> person.name
+                ));
+
+    Map<String, List<Person>> byCity = people
+                .stream()
+                .collect(Collectors.groupingBy(p -> p.city));   // key based groups
+    
+    Map<String, List<String>> namesByCity = people
+                .stream()
+                .collect(Collectors.groupingBy(p -> p.city, Collectors.mapping(p ->p.name,Collectors.toList())));  // key and transformed value
 
 // 4. Shortciruciting - findFirst() - order maintained in parallel stream, findAny() and anyMatch/allMatch/noneMatch
+
     List<String> names = List.of("Alice", "Bob", "Charlie");
-    Optional<String> any = names.stream().findAny();
+    Optional<String> any = names
+                        .stream()
+                        .findAny();
+
     any.ifPresent(System.out::println);  // Output could be Alice, Bob, or Charlie (esp. i
 
-    boolean anyOdd = numbers.stream().anyMatch(n -> n % 2 != 0);
-    boolean allEven = numbers.stream().allMatch(n -> n % 2 == 0);
-    boolean noneNegative = numbers.stream().noneMatch(n -> n < 0);
+    boolean anyOdd = numbers
+                        .stream()
+                        .anyMatch(n -> n % 2 != 0);
+
+    boolean allEven = numbers
+                        .stream()
+                        .allMatch(n -> n % 2 == 0);
+
+    boolean noneNegative = numbers
+                        .stream()
+                        .noneMatch(n -> n < 0);
 
 ```
 ## FAQ coding questions
@@ -151,7 +198,7 @@ int sumOfSquaresOfOdd = numbers.stream()
 
 List<Integer> evenNumbers = numbers.stream()
                                   .filter(n -> n % 2 == 0)
-                                   .collect(Collectors.toList());
+                                  .collect(Collectors.toList());
 
 
 List<Integer> uniqueNumbers = numbers.stream()
